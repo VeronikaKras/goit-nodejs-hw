@@ -19,6 +19,7 @@ const userSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: 'user',
     },
+    avatarURL: String,
     subscription: {
       type: String,
       enum: ["starter", "pro", "business"],
