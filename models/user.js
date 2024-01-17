@@ -15,6 +15,10 @@ const userSchema = new Schema(
       required: [true, "Email is required"],
       unique: true,
     },
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: 'user',
+    },
     subscription: {
       type: String,
       enum: ["starter", "pro", "business"],
