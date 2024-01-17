@@ -3,7 +3,11 @@ const express = require("express");
 const controllers = require("../../controllers/auth");
 
 const { validateBody, authenticate, upload } = require("../../middleWares");
-const { registerSchema, loginSchema } = require("../../models/user");
+const {
+  registerSchema,
+  loginSchema,
+  emailSchema,
+} = require("../../models/user");
 
 const router = express.Router();
 
@@ -15,11 +19,21 @@ router.get("/current", authenticate, controllers.getCurrent);
 
 router.post("/logout", authenticate, controllers.logout);
 
-router.patch("/avatars", authenticate, upload.single("avatar"), controllers.updateAvatar);
+router.get("/verify/:verificationToken", controllers.verifyEmailUser);
 
+router.patch(
+  "/avatars",
+  authenticate,
+  upload.single("avatar"),
+  controllers.updateAvatar
+);
+
+router.post(
+  "/verify",
+  validateBody(emailSchema),
+  controllers.resendVerifyEmailUser
+);
 module.exports = router;
-
-
 
 // const express = require('express');
 // const Joi = require('joi');
@@ -28,10 +42,7 @@ module.exports = router;
 // const jwt = require('jsonwebtoken');
 // const authenticate = require('../middleWares/authenticate');
 
-
 // const router = express.Router();
-
-
 
 // // register
 // const registrationSchema = Joi.object({
@@ -58,7 +69,7 @@ module.exports = router;
 //     const newUser = new User({
 //       email,
 //       password: hashedPassword,
-//       subscription: 'starter', 
+//       subscription: 'starter',
 //     });
 
 //     await newUser.save();
@@ -69,7 +80,6 @@ module.exports = router;
 //     res.status(500).json({ message: 'Internal Server Error' });
 //   }
 // });
-
 
 // // login
 // const loginSchema = Joi.object({
@@ -104,7 +114,6 @@ module.exports = router;
 //     res.status(500).json({ message: 'Internal Server Error' });
 //   }
 // });
-
 
 // router.use(authenticate);
 
@@ -146,25 +155,7 @@ module.exports = router;
 //   }
 // });
 
-
-
 // module.exports = router;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // const express = require("express");
 
@@ -175,9 +166,6 @@ module.exports = router;
 
 // const router = express.Router();
 
-
 // router.post("/register", validateBody(schemas.registerSchema), register)
 
 // module.exports = router;
-
-

@@ -17,13 +17,21 @@ const userSchema = new Schema(
     },
     owner: {
       type: Schema.Types.ObjectId,
-      ref: 'user',
+      ref: "user",
     },
     avatarURL: String,
     subscription: {
       type: String,
       enum: ["starter", "pro", "business"],
       default: "starter",
+    },
+    verify: {
+      type: Boolean,
+      default: false,
+    },
+    verificationToken: {
+      type: String,
+      required: [true, "Verify token is required"],
     },
     token: String,
   },
@@ -44,4 +52,7 @@ const loginSchema = Joi.object({
   password: Joi.string().min(6).required(),
 });
 
-module.exports = { User, registerSchema, loginSchema };
+const emailSchema = Joi.object({
+  email: Joi.string().email().required(),
+});
+module.exports = { User, registerSchema, loginSchema, emailSchema };
